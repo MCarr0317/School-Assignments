@@ -1,0 +1,79 @@
+//Author: Matt Carr
+//Program:Auto Handle Picker
+//File:HandleLength.cpp
+//Purpose:This program uses input from the user 
+//to pick the right pitchfork for dealing with dead 'possums
+
+
+
+#include <iostream>
+using namespace std;
+
+
+int main()
+{
+  //declaring variables
+  const float IDIOTS = 8;
+  const short DIVISOR = 10;
+  float Weight,Length,HLength,StinkFactor,BPressure;
+  short Fork;  
+  
+  //Intro
+  cout<< "Hello! This is the Auto Handle Picker!"<<endl<<endl;
+  cout<< "Please enter the following parameters into the machine:"<<endl<<endl;
+  cout<<"------------------------------------------------------------"<<endl;
+  
+ //Input and error trapping
+ 
+ //Stink Factor
+  do {
+    cout<<"Stink Factor(between 1 and 10):     ";
+    cin>>StinkFactor;
+    cout<<endl;}
+  while ((StinkFactor < 1) || (StinkFactor > 10));
+ 
+  //Barometric Pressure
+  do {
+    cout<<"Barometric Pressure(must be positive):     ";
+    cin>>BPressure;
+    cout<<endl;}
+  while (BPressure <= 0);
+  
+  //Tail Length
+  do {
+    cout<<"Tail Length(between 4.5 and 15):     ";
+    cin>>Length;
+    cout<<endl;}
+  while ((Length < 4.5) || ( Length > 15));
+ 
+  //Weight
+  do {
+    cout<<"Weight(between 2.7 and 45.5):     ";
+    cin>>Weight;
+    cout<<endl;}
+  while ((Weight < 2.7) || (Weight > 45.5)); 
+ 
+  //displaying echoes
+  cout<<"-----------------------------------------------------------\n";
+  cout<< "These are your parameters:\n";
+  cout<< "Weight:            "<<Weight<<endl;
+  cout<< "Bar. Pressure:     "<<BPressure<<endl;
+  cout<< "Stink:             "<<StinkFactor<<endl;
+  cout<< "Tail Length:       "<<Length<<endl<<endl;
+  cout<< "Handle Length is:  ";
+  
+  //formula for length of handle
+  HLength = ((StinkFactor/IDIOTS) * ((3 * Length) + Weight) + (30 * 
+                                          (StinkFactor/BPressure)));
+  
+  cout<<HLength<<" inches"<<endl;
+  
+  Fork = static_cast<int>(HLength/DIVISOR);
+  
+  //Choosing Pitchfork
+  cout<<"You should use fork #"<<Fork<<endl<<endl;
+  
+  //Closing
+  cout<<"Goodbye\n";
+  return 0;
+ }
