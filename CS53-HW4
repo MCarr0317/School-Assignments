@@ -1,0 +1,91 @@
+//Programmer: MATT CARR  
+//File: CubeRoot.cpp
+//Purpose: Determine the square and cube root of an integer.
+//Date:9-14-2011
+
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main()
+{
+  const int NumIterations = 10;
+  string Menu;
+  int MenuChoice, Num = 0, Square, i = 1;
+  float CubeRoot, n;
+  
+  //Greeting and Menu
+  cout<<"Hey! This program uses a menu to calculate a cube root of a number"<<endl;
+  Menu = "Menu:\n-----\n"
+  "1. Enter a positive number\n"
+  "2. Square the number you entered\n"
+  "3. Cube root the number you entered\n"
+  "4. Exit program\n";
+  
+  cout<<Menu;
+  cin>> MenuChoice;
+do
+ { 
+ //choice 1 
+  if (MenuChoice == 1)
+    {
+   do
+     {
+       cout<<"Enter your number(Must be positive):     ";
+       cin>>Num;
+       cout<<endl;
+     } while ((MenuChoice == 1) && (Num <= 0));
+    
+ cout<<"Your number is "<<Num<<endl;
+ cout<<Menu;
+ cin>>MenuChoice;
+   }
+ 
+ //choice 2
+ while ((MenuChoice == 2) && (Num == 0))
+   {
+     cout<<"You must enter a number before you can square it."<<endl;
+     cout<<Menu;
+     cin>>MenuChoice;
+   }
+ if ((MenuChoice == 2)  && (Num > 0))
+   {
+     Square = (Num * Num);
+     cout<<"Your squared number is "<<Square<<endl;
+     cout<<Menu;
+     cin>>MenuChoice;
+   }
+   
+ //choice 3
+ while ((MenuChoice == 3) && (Num == 0))
+   {
+     cout<<"You must enter a number before you can find the cube root of it."<<endl;
+     cout<<Menu;
+     cin>>MenuChoice;
+   }
+ if ((MenuChoice == 3) && (Num > 0))
+   {
+     CubeRoot = Num;
+   
+     for (i = 1; i <= NumIterations; i++)
+       {
+         n = (2 * CubeRoot + Num/(CubeRoot * CubeRoot))/3;
+         CubeRoot = n;
+         cout<<n<<endl;
+       }
+      
+     cout<<"The cubed root of your number is "<<n<<endl;
+     cout<<Menu;
+     cin>>MenuChoice;
+   }
+} while (MenuChoice != 4);
+ 
+ if (MenuChoice == 4)
+   {
+   cout<<"Come again soon!"<<endl;
+   exit(0);
+   }
+   
+ 
+return 0;
+}
