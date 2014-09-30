@@ -1,0 +1,173 @@
+//Author: Matt Carr 
+//File: HowToWork.cpp 
+//Purpose: This program uses user input to recommend an appropriate work option.
+//Date: 9-9-2011
+
+
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  string Name, Rec;
+  char Motivation, Rain, SupInt;
+  short Children, Adults, Gas;
+  float RainLevel;
+  
+  //Greeting
+  cout<<"Hi! This program calculates the appropriate work option";
+  cout<<" based on your motivation\n\n";
+  
+  //input of name
+  cout<<"Enter your name please(no spaces):               ";
+  cin>>Name;
+  cout<<"Welcome, "<<Name<<endl;
+  
+  //input of motivation level
+  do {
+  cout<<"What is your motivation level (a,b,c,d,or e)?     ";
+  cin>>Motivation;
+  cout<<endl;
+  }
+  while ((Motivation != 'a') && (Motivation != 'b') && (Motivation != 'c')
+    && (Motivation != 'd') && (Motivation != 'e'));
+  
+  //
+  //processing the motivation level
+  //
+  
+  //option e
+ if (Motivation == 'e')
+   { 
+   Rec = "stay in bed and skip work";
+   }
+  
+  //option d
+ if (Motivation == 'd') 
+   {
+   do {
+     cout<<"Did it rain the night before?(Y/N)    ";
+     cin>>Rain;
+     }
+   while ((Rain != 'Y') && (Rain != 'N'));
+   
+   //Rain input for d
+   if (Rain == 'Y')
+     {
+     Rec = "hide in the toolshed\n\n";
+     }
+      
+   else 
+     {
+     Rec = "hide in the hedge\n\n";
+     }
+   }
+
+ //option c
+ if (Motivation == 'c') 
+   {
+   do {
+     cout<<"How much did it rain? (inches)     ";
+     cin>>RainLevel;
+      }
+   while (RainLevel < 0);
+  
+  //Rain Level input for c
+  if (RainLevel < 1.5)
+    {
+    Rec = "lean on a rake\n";
+    }
+  else 
+    { 
+    Rec = "lean on a broom inside the house\n\n";
+    }
+  }
+  
+  //option b
+  if (Motivation == 'b')
+    {
+    do
+      {
+      cout<<"Is Superintendant Chalmers present?(Y/N)     ";
+      cin>>SupInt; 
+      }
+    while ((SupInt != 'Y') && (SupInt != 'N'));
+    
+    if (SupInt == 'Y')
+      {
+      Rec = "get on hands and knees and scrub the floor\n\n";
+      }
+    else 
+      {
+      cout<<"How many children are present?     ";
+      cin>>Children;
+      cout<<endl;
+      
+      cout<<"How many adults are present?     ";
+      cin>>Adults;
+      cout<<endl;
+      }
+       
+      if  (Adults > Children)
+        {
+        Rec = "get on hands and knees and scrub the floor\n\n";
+        }
+      else 
+        {
+        Rec = "mop the floor\n\n";
+        }
+   }
+  
+  //Option a 
+  if (Motivation == 'a') 
+    {
+    do {
+      cout<<"How many gallons of gas do you have?\n";
+      cin>>Gas;
+      cout<<endl;
+      }
+    while (Gas < 0);
+    
+    do {
+      cout<<"How many inches did it rain the night before, if at all?\n";
+      cin>>RainLevel;
+      cout<<endl;
+      }
+    while (RainLevel < 0);
+    
+    //decision branching in option a
+    if (((Gas >=5) && (Gas <=10)) && (RainLevel < 0.5)) 
+      {
+      Rec = "mow the grass\n\n";
+      }
+    else if ((Gas > 10) && (RainLevel < 0.5))
+      {
+      Rec = "get on the tractor and do laps around the school\n\n";
+      }
+    else if ((Gas < 5) && (RainLevel < 0.5))
+      {
+      Rec = "go get more gas\n\n";
+      }
+    if (RainLevel >= 0.5)
+      {
+      if (Gas < 5) 
+        {
+        Rec = "burn old textbooks from the 1940's\n\n";
+        }
+      else
+        {
+        Rec = "use your gas to clean the bathrooms\n\n";
+        }
+      }
+    }
+     
+ //Displaying the output    
+ cout<<"-----------------------------------------------------\n\n";
+ cout<<"You should "<<Rec<<endl;
+ 
+ //signoff
+ cout<<"Goodbye!\n";
+ 
+return 0;
+}  
