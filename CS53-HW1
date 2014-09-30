@@ -1,0 +1,39 @@
+Matt Carr
+Homework 1
+
+Modulo Division
+1. Establish the dividend to be "A" and the divisor as "B"
+2. Calculate (A/B)
+3. Truncate (A/B) to the nearest whole number
+4. Multiply the whole number by B
+5. Subtract product from A to get end result.
+e.g. A mod B = A - (B * int(A/B))
+     19 mod 4 = 19 - (4 * int(19/4)) = 19 - 16 = 3
+
+Alternate Module Division:
+1. Establish the dividend to be "A" and the divisor as "B"
+2. Calculate A/B
+3. Subtract the int(A/B) from (A/B), name this number as C.
+4. Multiply C by B to get final answer.
+e.g. A mod B = ((A/B) - int(A/B)) * B
+     19 mod 4 = ((19/4) - int(19/4) * 4 = (4.75 - 4) * 4 = 3
+     
+       
+Life is Good
+1. fold the string in half, fourths, and eights. Mark the 4 inch, 2 inch, and 1 inch lines, respectively.
+2. Stretch string along measured object.
+3. Mark where end of string lies on object, then remove string and place the begging on the mark.
+4. Measure with the smaller segments if remaining length of object exceeds length of bigger segments.
+5. Count how many segments of each length it took to reache nd of object.
+6. Multiply by respective segments, add products together.
+
+Maze
+constant: always check for changes in walls around you.
+1. If more than one starting direction, pick random direction using the randomize function.
+2. Float in that direction.
+3. Count how many drops of ink you drop in each particular direction.
+4. If tentacles sense change in possible directions around you, randomly pick direction other then direction you came.
+5. If tentacles sense wall ahread, use tentacles to search for other walls around you, repeat #3
+6. If there are no new directions, trace back your ink drops to where you started by recounting them and making sure both numbers match.
+7. Float in direction without any ink drops in it.
+8. Repeat from step #1.
