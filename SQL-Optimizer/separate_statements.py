@@ -12,7 +12,7 @@ def separate_statements(sql):
     parsed = sql.split()  # split into keywords
     stripped_parsed = [x.strip(',;()') for x in parsed]  # remove other characters
 
-    while contains_sub_select(parsed):
+    while contains_sub_select(stripped_parsed):
         for i in xrange(len(stripped_parsed)-1, -1, -1):  # search the query backwards, without the other characters
             if stripped_parsed[i] == "SELECT":  # if we see a select, this is the start of the deepest select in the query
                 x = i  # mark this position in the string
@@ -41,7 +41,6 @@ def separate_statements(sql):
 
 
 def contains_sub_select(query):  # query is a keyword-parsed list with extra chars removed
-    query = [x.strip(',;()') for x in query]
     for item in query[1:]:  # exclude the first select
         if item == 'SELECT':
             return True
