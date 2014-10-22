@@ -1,3 +1,5 @@
+__author__ = 'Matthew Carr'
+
 
 class Parser:
     def __init__(self, sql):
@@ -44,19 +46,9 @@ class Parser:
             if where_reached:
                 self.conditionals.append(token)
 
-
     def output(self):
-        print '\nStatement to parse: ', self.sql
+        print '\nStatement to parse: ', self.sql, '\n' + '-'*80
         print '\tTokens: ', self.parsed
         print '\tAttributes: ', self.attributes
         print '\tRelations: ', self.relations
         print '\tConditions: ', self.conditionals, '\n'
-        
-        
-        
-        
-        
-        
-test_parsed = Parser(test[0])
-test_parsed.parse()
-test_parsed.output()
