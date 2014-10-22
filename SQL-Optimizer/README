@@ -1,0 +1,9 @@
+What this code currently does:
+1. takes a possibly nested sql selection query
+2. parses it down into usable objects
+3. rebuilds the query
+
+Todo:
+1. write code that translates the query into relational algebra
+2. write code to generate initial query tree
+3. write code to optimize tree
