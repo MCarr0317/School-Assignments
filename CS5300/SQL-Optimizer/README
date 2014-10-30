@@ -7,5 +7,7 @@ Todo:
 1. write code that replaces SQL tokens with relational algebra tokens
   - write code to insert cartesian product and parenthesis  
 2. write code to reorder clauses to valid RelAlg.
+  - write code to re-nest statements for pretty output of query, but don't re-nest them in the internal structure
 3. write code to generate initial query tree
 4. write code to optimize tree
+5. write code to output optimized tree
