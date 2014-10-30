@@ -1,11 +1,15 @@
 __author__ = 'Matthew Carr'
 
+from copy import deepcopy
 ###################################################################
 # Currently works on a query of the form SELECT-FROM-WHERE-ORDER BY
 ###################################################################
 
 
 class Translator:
+    keywords = {'SELECT': 'PROJECT', 'FROM': '', 'WHERE': 'SELECT', 'ORDER': '', 'BY': '', 'JOIN': 'JOIN'}
+    translated = False
+
     def __init__(self, sql):
         self.sql = sql
         self.individual_statements = self.separate_statements(sql)
@@ -13,8 +17,9 @@ class Translator:
         #### for each statement in individual statements
         self.Parsed = self.Parser(self.individual_statements[0])
         self.Parsed.parse()  # parse into lines
-        #test.output()
 
+        self.Translate()
+        #print self.Parsed.select_clause
         self.statement = self.Statement(self.Parsed.select_clause, self.Parsed.from_clause, self.Parsed.where_clause, self.Parsed.order_clause)
 
 
@@ -36,39 +41,38 @@ class Translator:
         def parse(self):
             #print self.parsed
             keyword = 'ORDER'
-            #clause = [None]
+            clause = []
+            found_order = found_where = found_from = found_select = False
 
             while not self.select_clause:
-                #print keyword
-                found = False
                 for i in xrange(len(self.parsed)-1, -1, -1):
                     if keyword in self.parsed[i].upper():
-                        found = True
+
                         #print keyword, self.parsed[i].upper()
                         clause = self.parsed[i:]
                         #print clause
                         self.parsed = self.parsed[:i]  # remove the clause to prepare for other other iterations
                         break
 
-                if not found:
-                    clause = []
-
-                if not self.order_clause:
+                if not found_order:
                     self.order_clause = clause
                     #print 'Order clause becomes: ', self.order_clause
                     keyword = 'WHERE'
+                    found_order = True
 
-                elif not self.where_clause:
+                elif not found_where:
                     self.where_clause = clause
                     keyword = 'FROM'
+                    found_where = True
 
-                elif not self.from_clause:
+                elif not found_from:
                     self.from_clause = clause
                     keyword = 'SELECT'
+                    found_from = True
 
-                elif not self.select_clause:
+                elif not found_select:
                     self.select_clause = clause
-                    break
+                    found_select = True
 
         def output(self):
             print self.select_clause, 'select'
@@ -85,7 +89,14 @@ class Translator:
             self.Order = self.OrderClause(_OrderClause)
 
         def __repr__(self):
-            return self.Select.__repr__() +'\n' + self.From.__repr__() + '\n' + self.Where.__repr__() + '\n' + self.Order.__repr__()
+            #if Translator.translated:
+            #return self.Select.__repr__() + '\n' + self.Where.__repr__() + '\n' + self.From.__repr__()
+            #else:
+            if self.Order.order_list:
+                return self.Select.__repr__() + '\n' + self.From.__repr__() + '\n' + self.Where.__repr__() + '\n' + self.Order.__repr__()
+            else:
+                return self.Select.__repr__() + '\n' + self.Where.__repr__() + '\n' + self.From.__repr__()
+
 
         class FromClause:
             def __init__(self, relation_list):
@@ -133,8 +144,26 @@ class Translator:
             return self.name.upper() + ':\n' + '-'*30 + '\n' + output_string
 
 
+    def ReplaceKeywords(self, clause, add_parens=False):
+        new = deepcopy(clause)
+        for i in xrange(len(new)):
+            #print word.upper()
+            if new[i].upper().strip('()') in Translator.keywords:
+                Translator.Translated = True
+                new[i] = Translator.keywords[new[i].upper().strip('()')]
+
+        #print new
+        if add_parens:
+            new = ['('] + new + [')']
+
+        return new
+
     def Translate(self):
-        pass
+        self.Parsed.select_clause = self.ReplaceKeywords(self.Parsed.select_clause)
+        self.Parsed.from_clause = self.ReplaceKeywords(self.Parsed.from_clause, True)
+        self.Parsed.where_clause = self.ReplaceKeywords(self.Parsed.where_clause)
+        self.Parsed.order_clause = self.ReplaceKeywords(self.Parsed.order_clause)
+
 
     # separates nested statements and orders them in a list
     @staticmethod
@@ -173,6 +202,7 @@ class Translator:
         #print len(individual_statements)
         return individual_statements
 
+    #returns true if a query has a sub-select statement
     @staticmethod
     def contains_sub_select(query):  # query is a keyword-parsed list with extra chars removed
         found = False
@@ -182,4 +212,3 @@ class Translator:
             if found and 'SELECT' in item.upper():
                 return True
         return False
-
