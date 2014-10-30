@@ -5,6 +5,7 @@ What this code currently does:
 
 Todo:
 1. write code that replaces SQL tokens with relational algebra tokens
-2. write code to reorder clauses to valud RelAlg.
+  - write code to insert cartesian product and parenthesis  
+2. write code to reorder clauses to valid RelAlg.
 3. write code to generate initial query tree
 4. write code to optimize tree
