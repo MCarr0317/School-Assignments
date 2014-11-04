@@ -1,6 +1,4 @@
-SELECT name FROM world WHERE population > (SELECT population FROM world WHERE name='Romania')
 SELECT movieTitle FROM StarsIn, customers WHERE starName = name AND birthdate = 1960 ORDER BY starName DESC
-select * from catasto where family_name = "MACHIAVELL"
 select name, patronymic, family_name, sex, total, bocche from catasto where family_name = "MACHIAVELL" order by patronymic
 select count(*) from catasto where series = 1
 select count(*), sex from catasto where series = 1 group by sex
@@ -8,3 +6,9 @@ select avg(total), sex from catasto where series = 1 and sex <> 0 and total <> 0
 select count(*), trade, sex from catasto where series = 1 and sex <> 0 group by trade, sex
 select (round(avg(total/bocche), 2)), trade from catasto where series = 1 and total <> 0 and sex = 1 group by trade
 select name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total from catasto where series = 1 and migration = 4
+SELECT games.yr, city.country FROM games JOIN city ON (games.city = city.name)
+SELECT * FROM world WHERE name = "john"
+SELECT name FROM world WHERE population > (SELECT population FROM new_world WHERE population > (SELECT population2 FROM world2 WHERE name = 'Romania2'))
+SELECT blah FROM BLAH WHERE ROWNUM <=12;
+SELECT name FROM world WHERE population > (SELECT population FROM world WHERE name = 'Romania')
+select * from catasto where family_name = "MACHIAVELL"
