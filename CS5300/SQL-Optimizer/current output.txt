@@ -1,0 +1,184 @@
+C:\Python27\python.exe "C:/Users/Matthew/Documents/SQL Optimizer/main.py"
+PROJECT movieTitle
+SELECT starName = name AND birthdate = 1960
+ StarsIn, customers
+
+PROJECT movieTitle
+	SELECT starName = name AND birthdate = 1960
+		X
+			StarsIn,
+			customers
+
+
+--------------------------------------------------------------------------------
+PROJECT name, patronymic, family_name, sex, total, bocche
+SELECT family_name = "MACHIAVELL"
+ catasto
+
+PROJECT name, patronymic, family_name, sex, total, bocche
+	SELECT family_name = "MACHIAVELL"
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT count(*)
+SELECT series = 1
+ catasto
+
+PROJECT count(*)
+	SELECT series = 1
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT count(*), sex
+SELECT series = 1
+ catasto
+
+PROJECT count(*), sex
+	SELECT series = 1
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT avg(total), sex
+SELECT series = 1 and sex <> 0 and total <> 0
+ catasto
+
+PROJECT avg(total), sex
+	SELECT series = 1 and sex <> 0 and total <> 0
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT count(*), trade, sex
+SELECT series = 1 and sex <> 0
+ catasto
+
+PROJECT count(*), trade, sex
+	SELECT series = 1 and sex <> 0
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT (round(avg(total/bocche), 2)), trade
+SELECT series = 1 and total <> 0 and sex = 1
+ catasto
+
+PROJECT (round(avg(total/bocche), 2)), trade
+	SELECT series = 1 and total <> 0 and sex = 1
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total
+SELECT series = 1 and migration = 4
+ catasto
+
+PROJECT name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total
+	SELECT series = 1 and migration = 4
+		catasto
+
+
+--------------------------------------------------------------------------------
+PROJECT games.yr, city.country
+
+ games JOIN city ON (games.city = city.name)
+
+PROJECT games.yr, city.country
+	
+		X
+			games
+			JOIN
+			city
+			ON
+			(games.city
+			=
+			city.name)
+
+
+--------------------------------------------------------------------------------
+PROJECT *
+SELECT name = "john"
+ world
+
+PROJECT *
+	SELECT name = "john"
+		world
+
+
+--------------------------------------------------------------------------------
+PROJECT population2
+SELECT name = 'Romania2'
+ world2
+
+PROJECT population2
+	SELECT name = 'Romania2'
+		world2
+
+
+PROJECT population
+SELECT population >
+ new_world
+
+PROJECT population
+	SELECT population >
+		X
+			world2
+			new_world
+
+
+PROJECT name
+SELECT population >
+ world
+
+PROJECT name
+	SELECT population >
+		X
+			world2
+			new_world
+			world
+
+
+--------------------------------------------------------------------------------
+PROJECT blah
+SELECT ROWNUM <=12;
+ BLAH
+
+PROJECT blah
+	SELECT ROWNUM <=12;
+		BLAH
+
+
+--------------------------------------------------------------------------------
+PROJECT population
+SELECT name = 'Romania'
+ world
+
+PROJECT population
+	SELECT name = 'Romania'
+		world
+
+
+PROJECT name
+SELECT population >
+ world
+
+PROJECT name
+	SELECT population >
+		X
+			world
+			world
+
+
+--------------------------------------------------------------------------------
+PROJECT *
+SELECT family_name = "MACHIAVELL"
+ catasto
+
+PROJECT *
+	SELECT family_name = "MACHIAVELL"
+		catasto
+
+
+--------------------------------------------------------------------------------
