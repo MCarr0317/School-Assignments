@@ -1,0 +1,8 @@
+Grade summary:
+---
+22 / 22 tests passed: 80 / 80
+---
+Bytes lost overall: 0
+Memory errors: 0
+Memory Management: 20 / 20
+Base Total: 100 / 100
