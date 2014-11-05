@@ -1,0 +1,64 @@
+==14358== Memcheck, a memory error detector
+==14358== Copyright (C) 2002-2009, and GNU GPL'd, by Julian Seward et al.
+==14358== Using Valgrind-3.6.0.SVN-Debian and LibVEX; rerun with -h for copyright info
+==14358== Command: ./cs153drv
+==14358== 
+[==========] Running 22 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 22 tests from VectorTest
+[ RUN      ] VectorTest.CorrectDefaultSize
+[       OK ] VectorTest.CorrectDefaultSize
+[ RUN      ] VectorTest.CorrectDefaultMaxSize
+[       OK ] VectorTest.CorrectDefaultMaxSize
+[ RUN      ] VectorTest.PushBackSingle
+[       OK ] VectorTest.PushBackSingle
+[ RUN      ] VectorTest.PushBackMulti
+[       OK ] VectorTest.PushBackMulti
+[ RUN      ] VectorTest.BracketReadNegativeIndex
+[       OK ] VectorTest.BracketReadNegativeIndex
+[ RUN      ] VectorTest.BracketReadIndexLargerThanSize
+[       OK ] VectorTest.BracketReadIndexLargerThanSize
+[ RUN      ] VectorTest.BracketReadIndexIsSize
+[       OK ] VectorTest.BracketReadIndexIsSize
+[ RUN      ] VectorTest.BracketWriteNegativeIndex
+[       OK ] VectorTest.BracketWriteNegativeIndex
+[ RUN      ] VectorTest.BracketWriteIndexLargerThanSize
+[       OK ] VectorTest.BracketWriteIndexLargerThanSize
+[ RUN      ] VectorTest.BracketWriteIndexIsSize
+[       OK ] VectorTest.BracketWriteIndexIsSize
+[ RUN      ] VectorTest.PopBackSingle
+[       OK ] VectorTest.PopBackSingle
+[ RUN      ] VectorTest.PopBackMulti
+[       OK ] VectorTest.PopBackMulti
+[ RUN      ] VectorTest.PopBackEmpty
+[       OK ] VectorTest.PopBackEmpty
+[ RUN      ] VectorTest.Clear
+[       OK ] VectorTest.Clear
+[ RUN      ] VectorTest.ClearMulti
+[       OK ] VectorTest.ClearMulti
+[ RUN      ] VectorTest.ClearEmpty
+[       OK ] VectorTest.ClearEmpty
+[ RUN      ] VectorTest.AssignmentEmpty
+[       OK ] VectorTest.AssignmentEmpty
+[ RUN      ] VectorTest.AssignmentPopulated
+[       OK ] VectorTest.AssignmentPopulated
+[ RUN      ] VectorTest.RemoveEmpty
+[       OK ] VectorTest.RemoveEmpty
+[ RUN      ] VectorTest.RemoveFirst
+[       OK ] VectorTest.RemoveFirst
+[ RUN      ] VectorTest.RemoveLast
+[       OK ] VectorTest.RemoveLast
+[ RUN      ] VectorTest.RemoveMiddle
+[       OK ] VectorTest.RemoveMiddle
+[----------] Global test environment tear-down
+[==========] 22 tests from 1 test case ran.
+[  PASSED  ] 22 tests.
+==14358== 
+==14358== HEAP SUMMARY:
+==14358==     in use at exit: 0 bytes in 0 blocks
+==14358==   total heap usage: 852 allocs, 852 frees, 74,141 bytes allocated
+==14358== 
+==14358== All heap blocks were freed -- no leaks are possible
+==14358== 
+==14358== For counts of detected and suppressed errors, rerun with: -v
+==14358== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
