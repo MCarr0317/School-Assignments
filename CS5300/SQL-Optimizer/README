@@ -6,5 +6,6 @@ What this code currently does:
 
 Todo:
 1. Properly distrubute Cross products over relations, instead of having one X for any amount of relations.
+2. Implement the schemas provided with the test data to make wildcard selections translate into the list of all attributes for that schema. 
 2. Code UNION, EXCEPT, and INTERSECT query handlers and the logic for generating a Tree from nested queries. Right now the app goes into an infinite loop on these.
 3. Write code to optimize tree
