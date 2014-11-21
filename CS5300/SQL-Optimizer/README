@@ -1,13 +1,10 @@
 What this code currently does:
-1. takes a possibly nested sql selection query
-2. parses it down into usable objects
-3. rebuilds the query
+1. Takes a possibly nested sql selection query
+2. Parses it down into usable objects
+3. Rebuilds the query
+4. Generated DOT code to visualize the graph using GraphViz
 
 Todo:
-1. write code that replaces SQL tokens with relational algebra tokens
-  - write code to insert cartesian product and parenthesis  
-2. write code to reorder clauses to valid RelAlg.
-  - write code to re-nest statements for pretty output of query, but don't re-nest them in the internal structure
-3. write code to generate initial query tree
-4. write code to optimize tree
-5. write code to output optimized tree
+1. Properly distrubute Cross products over relations, instead of having one X for any amount of relations.
+2. Code UNION, EXCEPT, and INTERSECT query handlers and the logic for generating a Tree from nested queries. Right now the app goes into an infinite loop on these.
+3. Write code to optimize tree
