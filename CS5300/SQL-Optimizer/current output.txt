@@ -1,207 +1,65 @@
 C:\Python27\python.exe "C:/Users/Matthew/Documents/SQL Optimizer/main.py"
-SELECT movieTitle FROM StarsIn, customers WHERE starName = name AND birthdate = 1960 ORDER BY starName DESC
-
-PROJECT movieTitle
-SELECT starName = name AND birthdate = 1960
- StarsIn, customers 
-
-PROJECT movieTitle
-	SELECT starName = name AND birthdate = 1960
-		X
-			StarsIn,
-			customers
-
-
+// query tree
+digraph {
+	A [label=<&#928;<SUB>S.sname</SUB>>]
+	B [label=<&#963;<SUB>S.sid=R.sid AND R.bid=103</SUB>>]
+	L [label="&#215;"]
+	0 [label="S,"]
+		L -> 0 [constraint=true]
+	1 [label=R]
+		L -> 1 [constraint=true]
+		A -> B
+		B -> L
+}
 --------------------------------------------------------------------------------
-select name, patronymic, family_name, sex, total, bocche from catasto where family_name = "MACHIAVELL" order by patronymic
-
-PROJECT name, patronymic, family_name, sex, total, bocche
-SELECT family_name = "MACHIAVELL"
- catasto 
-
-PROJECT name, patronymic, family_name, sex, total, bocche
-	SELECT family_name = "MACHIAVELL"
-		catasto
-
-
+// query tree
+digraph {
+	A [label=<&#928;<SUB>S.sname</SUB>>]
+	B [label=<&#963;<SUB>S.sid=R.sid AND R.bid=B.bid AND B.color='red'</SUB>>]
+	L [label="&#215;"]
+	0 [label="S,"]
+		L -> 0 [constraint=true]
+	1 [label=B]
+		L -> 1 [constraint=true]
+	2 [label="R,"]
+		L -> 2 [constraint=true]
+		A -> B
+		B -> L
+}
 --------------------------------------------------------------------------------
-select count(*) from catasto where series = 1
-
-PROJECT count(*)
-SELECT series = 1
- catasto 
-
-PROJECT count(*)
-	SELECT series = 1
-		catasto
-
-
+// query tree
+digraph {
+	A [label=<&#928;<SUB>S.sname</SUB>>]
+	B [label=<&#963;<SUB>R.sid = S.sid AND R.bid = 100 AND S.rating > 5 AND R.day = '8/9/09'</SUB>>]
+	L [label="&#215;"]
+	0 [label="S,"]
+		L -> 0 [constraint=true]
+	1 [label=R]
+		L -> 1 [constraint=true]
+		A -> B
+		B -> L
+}
 --------------------------------------------------------------------------------
-select count(*), sex from catasto where series = 1 group by sex
-
-PROJECT count(*), sex
-SELECT series = 1
- catasto 
-
-PROJECT count(*), sex
-	SELECT series = 1
-		catasto
-
-
---------------------------------------------------------------------------------
-select avg(total), sex from catasto where series = 1 and sex <> 0 and total <> 0 group by sex
-
-PROJECT avg(total), sex
-SELECT series = 1 and sex <> 0 and total <> 0
- catasto 
-
-PROJECT avg(total), sex
-	SELECT series = 1 and sex <> 0 and total <> 0
-		catasto
-
-
---------------------------------------------------------------------------------
-select count(*), trade, sex from catasto where series = 1 and sex <> 0 group by trade, sex
-
-PROJECT count(*), trade, sex
-SELECT series = 1 and sex <> 0
- catasto 
-
-PROJECT count(*), trade, sex
-	SELECT series = 1 and sex <> 0
-		catasto
-
-
---------------------------------------------------------------------------------
-select (round(avg(total/bocche), 2)), trade from catasto where series = 1 and total <> 0 and sex = 1 group by trade
-
-PROJECT (round(avg(total/bocche), 2)), trade
-SELECT series = 1 and total <> 0 and sex = 1
- catasto 
-
-PROJECT (round(avg(total/bocche), 2)), trade
-	SELECT series = 1 and total <> 0 and sex = 1
-		catasto
-
-
---------------------------------------------------------------------------------
-select name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total from catasto where series = 1 and migration = 4
-
-PROJECT name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total
-SELECT series = 1 and migration = 4
- catasto 
-
-PROJECT name, patronymic, family_name, volume, page, trade, sex, age, marital_status, bocche, total
-	SELECT series = 1 and migration = 4
-		catasto
-
-
---------------------------------------------------------------------------------
-SELECT games.yr, city.country FROM games JOIN city ON (games.city = city.name)
-
-PROJECT games.yr, city.country
-
- games JOIN city ON (games.city = city.name) 
-
-PROJECT games.yr, city.country
-	
-		X
-			games
-			JOIN
-			city
-			ON
-			(games.city
-			=
-			city.name)
-
-
---------------------------------------------------------------------------------
-SELECT * FROM world WHERE name = "john"
-
-PROJECT *
-SELECT name = "john"
- world 
-
-PROJECT *
-	SELECT name = "john"
-		world
-
-
---------------------------------------------------------------------------------
-SELECT name FROM world WHERE population > (SELECT population FROM new_world WHERE population > (SELECT population2 FROM world2 WHERE name = 'Romania2'))
-
-PROJECT population2
-SELECT name = 'Romania2'
- world2 
-
-PROJECT population2
-	SELECT name = 'Romania2'
-		world2
-
-
-PROJECT population
-SELECT population >
- new_world 
-
-PROJECT population
-	SELECT population >
-		new_world
-
-
-PROJECT name
-SELECT population >
- world 
-
-PROJECT name
-	SELECT population >
-		world
-
-
---------------------------------------------------------------------------------
-SELECT blah FROM BLAH WHERE ROWNUM <=12
-
-PROJECT blah
-SELECT ROWNUM <=12
- BLAH 
-
-PROJECT blah
-	SELECT ROWNUM <=12
-		BLAH
-
-
---------------------------------------------------------------------------------
-SELECT name FROM world WHERE population > (SELECT population FROM world WHERE name = 'Romania')
-
-PROJECT population
-SELECT name = 'Romania'
- world 
-
-PROJECT population
-	SELECT name = 'Romania'
-		world
-
-
-PROJECT name
-SELECT population >
- world 
-
-PROJECT name
-	SELECT population >
-		world
-
-
---------------------------------------------------------------------------------
-select * from catasto where family_name = "MACHIAVELL"
-
-PROJECT *
-SELECT family_name = "MACHIAVELL"
- catasto 
-
-PROJECT *
-	SELECT family_name = "MACHIAVELL"
-		catasto
-
-
+// query tree
+digraph {
+	A [label=<&#928;<SUB>R.sid</SUB>>]
+	B [label=<&#963;<SUB>R.bid = 103</SUB>>]
+	L [label="&#215;"]
+	0 [label=R]
+		L -> 0 [constraint=true]
+		A -> B
+		B -> L
+}
+// query tree
+digraph {
+	A [label=<&#928;<SUB>S.sname</SUB>>]
+	B [label=<&#963;<SUB>S.sid IN (</SUB>>]
+	L [label="&#215;"]
+	0 [label=S]
+		L -> 0 [constraint=true]
+		A -> B
+		B -> L
+}
 --------------------------------------------------------------------------------
 
 Process finished with exit code 0
