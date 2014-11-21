@@ -13,13 +13,15 @@ class Translator:
     def __init__(self, sql):
         self.sql = sql
         self.Parsed = self.Parser(self.sql)
-        self.Parsed.parse()  # parse into lines
-        self.Translate()
+        self.Parse()  # parse into lines
         self.statement = self.Statement(self.Parsed.select_clause, self.Parsed.from_clause, self.Parsed.where_clause, self.Parsed.order_clause)
 
 
     def __repr__(self):
         return self.statement.__repr__()
+
+    def Parse(self):
+        self.Parsed.parse()
 
     class Parser:
         def __init__(self, single_statement):
@@ -44,7 +46,7 @@ class Translator:
                     if keyword in self.parsed[i].upper() or 'GROUP' in self.parsed[i].upper():
 
                         #print keyword, self.parsed[i].upper()
-                        clause = self.parsed[i:]
+                        clause = self.parsed[i+1:]
                         #print clause
                         self.parsed = self.parsed[:i]  # remove the clause to prepare for other other iterations
                         break
@@ -62,12 +64,23 @@ class Translator:
 
                 elif not found_from:
                     self.from_clause = clause
+                    self.use_aliases()
                     keyword = 'SELECT'
                     found_from = True
 
                 elif not found_select:
                     self.select_clause = clause
                     found_select = True
+
+        #sets the from_clause to use the relation aliases, if any exist
+        def use_aliases(self):
+            aliases = {}  # make a list of relations and their aliases for later use
+            for i in xrange(len(self.from_clause)):
+                if 'AS' in self.from_clause[i]:
+                    aliases[self.from_clause[i-1]] = self.from_clause[i+1]
+
+            self.from_clause = aliases.values()
+
 
 
         def output(self):
@@ -104,7 +117,7 @@ class Translator:
         for i in xrange(len(new)):
             #print word.upper()
             if new[i].upper().strip('()') in Translator.keywords:
-                Translator.Translated = True
+                Translator.translated = True
                 new[i] = Translator.keywords[new[i].upper()]
 
         #print new
@@ -113,12 +126,13 @@ class Translator:
         return new
 
     def Translate(self):
-        Translator.translated = True
+        #Translator.translated = True
         self.Parsed.select_clause = self.ReplaceKeywords(self.Parsed.select_clause)
         self.Parsed.from_clause = self.ReplaceKeywords(self.Parsed.from_clause)
         self.Parsed.where_clause = self.ReplaceKeywords(self.Parsed.where_clause)
         self.Parsed.order_clause = self.ReplaceKeywords(self.Parsed.order_clause)
 
+        self.statement = self.Statement(self.Parsed.select_clause, self.Parsed.from_clause, self.Parsed.where_clause, self.Parsed.order_clause)
 
     # separates nested statements and orders them in a list
     @staticmethod
