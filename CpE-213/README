@@ -1,4 +1,5 @@
 This is code written for the Simon2 board, found here: https://sites.google.com/a/mst.edu/introtocpe/home/simon2-board
+The code is written in C using 8051 assembly
 
 The functional requirements we created were 
 1. Implement a binary increment/decrement counter using two buttons. The count was displayed on 4 of the 9 LED's. Incrementing at a current count of 15 would reset the counter to 0, and vice versa.
