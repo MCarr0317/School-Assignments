@@ -166,9 +166,6 @@ def make_tree(dot, T, index, index2, operator_created, index_optimization, optim
         ### keep the same original projection and relations
         moveable, rel, join_moveable, join_rel = find_moveable_selections(T, all_selects, relations)
 
-        #print moveable, rel
-        #print join_moveable, join_rel
-
         projection = create_projection_node(dot, str(index), ' '.join(T.Parsed.select_clause))
 
         # find which selections we should remove
@@ -176,12 +173,6 @@ def make_tree(dot, T, index, index2, operator_created, index_optimization, optim
 
         #create selections only if they arent ones that we need to remove
         selections, select_values, edges, nodes, operands = cascade_of_selections(dot, T, index_optimization, False, selects_to_remove)
-
-        #print 1, selects_to_remove
-        #print 2, select_values
-
-        #print selects_to_remove
-        #print crosses_to_remove
 
         # create join nodes
         joins, edges, num_joins = create_joins(dot, T, index, selects_to_remove, edges, True, join_moveable, select_values)
