@@ -19,6 +19,7 @@ moveable = []
 rel = []
 join_moveable = []
 join_rel = ()
+all_selects = []
 
 def reset_variables():
     global edges, cross_products, relations, selections, nodes, moveable, rel, join_moveable, join_rel
@@ -50,7 +51,7 @@ def create_cross_products(dot, T, index, cross_products, edges, create_edges=Tru
     num_crosses = len(T.Parsed.from_clause)-1  # determine the number of cross products needed as num_relations-1
 
     # for each cross product, create its node and append its identifier to a list
-    print index, num_crosses + index
+    #print index, num_crosses + index
     for i in xrange(index, num_crosses + index):
         dot.node(str(i + 2), "&#215;")  # node
         cross_products.append(str(i + 2))  # appending to list
@@ -59,37 +60,31 @@ def create_cross_products(dot, T, index, cross_products, edges, create_edges=Tru
     cross_products = list(set(cross_products))
     cross_products = cross_products[:num_crosses]
 
-    print 'cross', len(cross_products)
-    print 'num', num_crosses
+    #print 'cross', len(cross_products)
+    #print 'num', num_crosses
     if create_edges:
         for n in xrange(len(join_moveable)):
-            dot.edge(join_moveable[n], cross[n], constraint='true')
-            print '1', (join_moveable[n], cross[n])
+            make_edge(dot, join_moveable[n], cross[n])
+            #print '1', (join_moveable[n], cross[n])
 
 
-        print num_crosses
+        #print num_crosses
         if num_crosses >= 2:
             for n in xrange(0, num_crosses, 2):
-                #try:
-                 #   dot.edge(cross_products[n], join_moveable[-1+n])
-                #except IndexError:
                 if _join_moveable:
                     try:
-                        dot.edge(cross_products[n], _join_moveable[n-1], constraint='true')
-                        edges.append(create_edge_string(cross_products[n], _join_moveable[-1+n]))
-                        print '2', (cross_products[n], _join_moveable[n-1])
+                        make_edge(dot, cross_products[n], _join_moveable[n-1])
+                        #print '2', (cross_products[n], _join_moveable[n-1])
                     except IndexError:
                         pass
                 else:
-                    dot.edge(cross_products[n], cross_products[n+1], constraint='true')
-                    edges.append(create_edge_string(cross_products[n], cross_products[n+1]))
-                    print '3', (cross_products[n], cross_products[n+1])
+                    make_edge(dot, cross_products[n], cross_products[n+1])
+                    #print '3', (cross_products[n], cross_products[n+1])
 
     # if we have atleast one cross product in the query, draw an edge between it and its parent selection node
         if cross_products and initial:
-           dot.edge(str(index-1), cross_products[0], constraint='true')
-           edges.append(create_edge_string(str(index-1), cross_products[0]))
-           print '4', (str(index-1), cross_products[0])
+            make_edge(dot, str(index-1), cross_products[0])
+           #print '4', (str(index-1), cross_products[0])
     #---------------------------------------------------------------------------
 
     return cross_products, edges, num_crosses
@@ -113,43 +108,37 @@ def create_relations(dot, T, index, index2, cross_products, create_edges=True, _
 
     #print relations
     if create_edges:
-        dot.edge(cross_products[-1], relations[0], constraint='true')
-        print '5', (cross_products[-1], relations[0])
+        make_edge(dot, cross_products[-1], relations[0])
+        #print '5', (cross_products[-1], relations[0])
         if cross_products:
             for i in xrange(1, len(relations)-1):
                 if _moveable:
                     #print 'here1'
-                    dot.edge(cross_products[-i], _moveable[i], constraint='true')
-                    edges.append(create_edge_string(cross_products[i], _moveable[i]))
-                    print '6', (cross_products[-i], _moveable[i])
+                    make_edge(dot, cross_products[-i], _moveable[i])
+                    #print '6', (cross_products[-i], _moveable[i])
                 else:
                     #print 'here2'
-                    dot.edge(cross_products[-i], relations[i], constraint='true')
-                    edges.append(create_edge_string(cross_products[i], relations[i]))
-                    print '7', (cross_products[-i], relations[i])
+                    make_edge(dot, cross_products[-i], relations[i])
+                    #print '7', (cross_products[-i], relations[i])
             if _moveable:
                 #print 'here3'
-                dot.edge(cross_products[0], _moveable[-1], constraint='true')
-                edges.append(create_edge_string(cross_products[-1], _moveable[-1]))
-                print '8', (cross_products[0], _moveable[-1])
+                make_edge(dot, cross_products[0], _moveable[-1])
+                #print '8', (cross_products[0], _moveable[-1])
             else:
                 #print 'here4'
-                dot.edge(cross_products[0], relations[-1], constraint='true')
-                edges.append(create_edge_string(cross_products[-1], relations[-1]))
-                print '9', (cross_products[0], relations[-1])
+                make_edge(dot, cross_products[0], relations[-1])
+                #print '9', (cross_products[0], relations[-1])
         else:
             #print 'here5'
-            dot.edge(str(index-1), symbol, constraint='true')
-            edges.append(create_edge_string(str(index-1), symbol))
-            print '10', (str(index-1), symbol)
+            make_edge(dot, str(index-1), symbol)
+            #print '10', (str(index-1), symbol)
 
-        #dot.edge(cross_products[-1], relations[0])
     #-------------------------------------------------------------------
 
     return relations
 
 def create_initial(dot, T, index, index2, operator_created, index_optimization, optimization_step):
-    global edges, cross_products, relations, selections, nodes
+    global edges, cross_products, relations, selections, nodes, all_selects
 
     index -= 5
     index2 += 10
@@ -167,8 +156,8 @@ def create_initial(dot, T, index, index2, operator_created, index_optimization, 
         #------------------------------------------------------------------------------------------------
         projection = create_projection_node(dot, str(index), ' '.join(T.Parsed.select_clause))
         selection = create_selection_node(dot, str(index-1), ' '.join(T.Parsed.where_clause))  # selection
-        dot.edge(projection, selection, constraint='true')  # edge
-        edges.append(create_edge_string(projection, selection))
+        make_edge(dot, projection, selection)
+
         #------------------------------------------------------------------------------------------------
 
         create_cross_products(dot, T, index, cross_products, edges, True, True)
@@ -189,13 +178,12 @@ def create_initial(dot, T, index, index2, operator_created, index_optimization, 
         # perform the optimization
         selections, edges, nodes = cascade_of_selections(dot, T, index_optimization)
         if nodes:
-            dot.edge(projection, nodes[0])  # edge between projection and first new node
-            edges.append(create_edge_string(projection, nodes[0]))
+            make_edge(dot, projection, nodes[0])
 
         cross_products, edges, num_crosses = create_cross_products(dot, T, index, cross_products, edges, True, False)  # create cross product nodes and edges
         if cross_products and nodes:
-            dot.edge(nodes[-1], cross_products[0])
-            edges.append(create_edge_string(nodes[-1], cross_products[0]))
+            make_edge(dot, nodes[-1], cross_products[0])
+
         relations = create_relations(dot, T, index, index2, cross_products, True)  # create relation nodes and edges
 
         #if operator_created:
@@ -208,8 +196,8 @@ def create_initial(dot, T, index, index2, operator_created, index_optimization, 
         # in this we are keeping all the same nodes, only changing the edges
         moveable, rel, join_moveable, join_rel = find_moveable_selections(T, selections, relations)
 
-        # moveable, rel
-        #print join_moveable, join_rel
+        print moveable, rel
+        print join_moveable, join_rel
 
          # Keep: projection, relations, cross_products
         projection = create_projection_node(dot, str(index), ' '.join(T.Parsed.select_clause))
@@ -218,63 +206,77 @@ def create_initial(dot, T, index, index2, operator_created, index_optimization, 
 
         # perform the optimization
         selections, edges, nodes = cascade_of_selections(dot, T, index_optimization, False)
-
+        all_selects = deepcopy(selections)
         selections = [item for item in selections if item not in moveable and item not in join_moveable]  # get the relation that cant be moved, draw the edge between projection and this
 
         #draw edge between projection and selection that cant be moved
         if selections:
-            dot.edge(projection, selections[0], constraint='true')
-            print '11', (projection, selections[0])
-            edges.append(create_edge_string(projection, selections[0]))
+            make_edge(dot, projection, selections[0])
+            #print '11', (projection, selections[0])
         else:
             if join_moveable:
-                dot.edge(projection, join_moveable[0])
-                edges.append(create_edge_string(projection, join_moveable[0]))
-                print '12', (projection, join_moveable[0])
+                make_edge(dot, projection, join_moveable[0])
+                #print '12', (projection, join_moveable[0])
 
         #edges between other selections that cant be moved if possible
         for i in xrange(0, len(selections)-1):
-            dot.edge(selections[i], selections[i+1])
-            edges.append(create_edge_string(selections[i], selections[i+1]))
-            print str(13+i), (selections[i], selections[i+1])
+            make_edge(dot, selections[i], selections[i+1])
+            #print str(13+i), (selections[i], selections[i+1])
 
         #draw edge between selection that cant be moved and cross product
         if selections:
-            dot.edge(selections[-1], cross_products[0])
-            edges.append(create_edge_string(selections[-1], cross_products[0]))
-            print '20', (selections[-1], cross_products[0])
+            make_edge(dot, selections[-1], cross_products[0])
+            #print '20', (selections[-1], cross_products[0])
 
         #draw edges between selection that can be moved and its relation
+        relations_moved = []
         for i in xrange(len(moveable)):
-            dot.edge(moveable[i], rel[i], constraint='true')
-            edges.append(create_edge_string(moveable[i], rel[i]))
-            print str(30+i), (moveable[i], rel[i])
+            if rel[i] not in [x[1] for x in relations_moved]:
+                make_edge(dot, moveable[i], rel[i])
+                relations_moved.append((moveable[i], rel[i]))
+                #print str(30+i), (moveable[i], rel[i])
+            else:
+                for n in xrange(len(relations_moved)):
+                    if relations_moved[n][1] == rel[i]:
+                        make_edge(dot, moveable[i], moveable[n])
+                        relations_moved.append((moveable[i], moveable[n]))
+                        #print str(30+i), (moveable[i], moveable[n])
+                        break
 
         # draw edges between cross products and relations that didnt get moved
         #relations.reverse()
         rel_same = [item for item in relations if item not in rel]
         #print rel_same
         if rel_same:  # relations that did not get a selection moved to them
-            dot.edge(cross_products[-1], rel_same[-1], constraint='true')
-            edges.append(create_edge_string(cross_products[0], rel_same[-1]))
-            print '40', (cross_products[-1], rel_same[-1])
+            make_edge(dot, cross_products[-1], rel_same[-1])
+            #print '40', (cross_products[-1], rel_same[-1])
             if cross_products:
                 for i in xrange(len(rel_same)-1):
-                    dot.edge(cross_products[-i], rel_same[-i], constraint='true')
-                    edges.append(create_edge_string(cross_products[-i], rel_same[i]))
-                    print str(60+i), (cross_products[-i], rel_same[-i])
+                    make_edge(dot, cross_products[-i], rel_same[-i])
+                    #print str(60+i), (cross_products[-i], rel_same[-i])
 
         #draw edges between cross product and new selections that were moved
+        crosses_made = []
         for i in xrange(len(moveable)):
-            dot.edge(cross_products[-1], moveable[i], constraint='true')
-            edges.append(create_edge_string(cross_products[-1], moveable[i]))
-            print '70', (cross_products[-1], moveable[i])
+            if moveable[i] not in [x[0] for x in relations_moved] and (cross_products[-1], moveable[i]) not in crosses_made:
+                make_edge(dot, cross_products[-1], moveable[i])
+                crosses_made.append((cross_products[-1], moveable[i]))
+                #print '70', (cross_products[-1], moveable[i])
 
+            else:
+                #for n in xrange(len(crosses_made)):
+                if (cross_products[-1], moveable[-i-1]) not in crosses_made and moveable[-i-1] not in [x[1] for x in relations_moved]:
+                    make_edge(dot, cross_products[-1], moveable[-i-1])
+                    crosses_made.append((cross_products[-1], moveable[-i-1]))
+                    #print '71', (cross_products[-1], moveable[-i-1])
 
-        for i in xrange(len(join_moveable)):
-            dot.edge(join_moveable[i], cross_products[i], constraint='true')
-            edges.append(create_edge_string(join_moveable[i], cross_products[i]))
+        #for i in xrange(len(join_moveable)):
+            make_edge(dot, join_moveable[i], cross_products[i])
             print '80', (join_moveable[i], cross_products[i])
+
+
+        determine_theta_joins(cross_products, edges, all_selects)
+
 
 def create_tree(test, initial=True):
     new = []
@@ -324,6 +326,11 @@ def create_tree(test, initial=True):
         create_initial(dot3, T, index, index2, operator_created, index_optimization, 2)
         print dot3
 
+        dot4 = Digraph(node_attr = {'shape': 'plaintext'})
+        create_initial(dot4, T, index, index2, operator_created, index_optimization, 3)
+        print dot4
+
+
 
         # indices used to create the specific identifiers for nodes.
         # these have to increase enough to not have any repeated identifiers in the dot code
@@ -365,22 +372,29 @@ def cascade_of_selections(dot, _T, index_optimization, create_edges=True):
 
     if create_edges:
         for i in xrange(len(nodes)-1):
-            dot.edge(nodes[i], nodes[i+1])
-            edges.append(create_edge_string(nodes[i], nodes[i+1]))
+            make_edge(dot, nodes[i], nodes[i+1])
 
     return selections, edges, nodes
 
-def determine_theta_joins(cross_products, _T, edges, selections, relations, index):
+def determine_theta_joins(cross_products, edges, selections):
     print edges
+    print cross_products
+    print selections
+
     if cross_products:
         for i in edges:
             for op in selections:
                 for cross in cross_products:
+                    print 'looking for', 'dot.edge(' + str(op) + ', ' + str(cross) + ')'
                     if 'dot.edge(' + str(op) + ', ' + str(cross) + ')' in i:
                         print 'make ', 'dot.edge(' + str(op) + ', ' + str(cross) + ')', ' a join'
 
 def create_edge_string(x, y):
     return 'dot.edge(' + str(x) + ', ' + str(y) + ')'
+
+def make_edge(dot, x, y):
+    dot.edge(x, y, constraint='true')
+    edges.append(create_edge_string(x, y))
 
 # returns a tuple of the identifier of the node which can be moved, and the relation identifier that it can be moved to
 def find_moveable_selections(T, selections, relations):
