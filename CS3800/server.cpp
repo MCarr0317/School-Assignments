@@ -74,25 +74,25 @@ int main()
   // create a stream socket
   if( ( sd = socket( AF_INET, SOCK_STREAM, 0 ) ) == -1 )
   {
-    cerr << "SERVER: socket failed" << endl;
+    cerr << "Server Error: socket failed" << endl;
     exit( 1 );
   }
   
   // bind the socket to a unique address
   if( bind(sd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1 )
   {
-    cerr << "SERVER: bind failed" << endl;
+    cerr << "Server Error: bind failed" << endl;
     exit( 1 );
   }
 
   // start listening for clients 
   if( listen( sd, MAX_CLIENT-1 ) == -1 )
   {
-    cerr << "SERVER: listen failed" << endl;
+    cerr << "Server Error: listen failed" << endl;
     exit( 1 );
   }
 
-  printf("SERVER is listening for clients to establish a connection\n");
+  printf("Server is listening for clients to establish a connection\n");
 
   int temp;
   // while a connection is accepted
@@ -169,12 +169,13 @@ void* runClient(void* arg)
     strcpy(username, buffer);
     strcat(message, "Welcome ");
     strcat(message, username);
+    strcat(message, "\n");
     write(skt, message, sizeof(message));
   }
   
   //create alert string
   pthread_mutex_lock(&m); // but lock first
-  strcat(message, "ALERT: ");
+  strcpy(message, "\nALERT: ");
   strcat(message, username);
   strcat(message, " joined the chat");
   strcpy(usernames[location], username);

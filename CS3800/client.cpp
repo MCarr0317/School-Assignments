@@ -22,15 +22,14 @@ using namespace std;
 int clientSocket;
 int k;
 char buff[1024];
-//char buffer[1024];
 char code[]="505";
-bool exitCondition=false;
+bool exitCondition = false;
 
 void signalHandler(int signalNumber)
 {
   if(signalNumber==2)
   {
-    cout<<"/To exit type /quit /exit or /part"<<endl;
+    cout<<"\nTo exit type /quit /exit or /part"<<endl;
   }
 }
 
@@ -85,7 +84,7 @@ int main(int argc, char* argv[])
   write(clientSocket, buff, sizeof(buff));
   // read from the server
   read(clientSocket, buff, sizeof(buff));
-  cout << buff << endl;
+  printf("%s\n", buff);
 
   //create thread for handling simultaneous input & output
   pthread_t readThread;
@@ -130,7 +129,7 @@ void* readingOut(void* arg)
       printf("Connection ended\n");
       exit(1);
     }
-    cout << buff << endl; //if not, print what the server has sent
+    printf("%s\n", buff); //if not, print what the server has sent
   }
   
   return NULL;
