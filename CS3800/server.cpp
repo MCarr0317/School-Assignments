@@ -18,7 +18,7 @@ This file acts as the server for a chat room
 #include <stdlib.h>
 using namespace std;
 
-#define SERVER_PORT 7777
+#define SERVER_PORT 9999
 
 const int MAX_CLIENT = 10;
 int FD[MAX_CLIENT]; // backlog of clients
@@ -42,7 +42,7 @@ void signalHandler(int sig)
       write(FD[i], message, sizeof(message));
   
   sleep(10); // wait for the ten seconds
-  char code[]="bRZUkq3h173Uc31"; // special code for terminating the program
+  char code[]="505"; // special code for terminating the program
   
   // boot the clients off
   for(int i = 0; i < MAX_CLIENT; i++)
@@ -147,76 +147,75 @@ int main()
 void* runClient(void* arg) 
 {
   if(arg == NULL)
-  {
     cerr << "Thread received null argument" << endl;
-  }
   
   char buffer[512];
   int k;
   int skt = *(int *)arg;
-  int location;
+  int location; // the index of usernames in FD
+
+  // find location of username in FD
   for(int i = 0; i < MAX_CLIENT; i++)
-  {
     if(FD[i] == skt)
-    {
       location = i;
-    }
-  }
-  char username[500];
+  
+  char username[500]; //containers for username and their messages
   char message[1024];
   
-  //read in client name;
+  //read in client username and greet them
   if((k = read(skt, buffer, sizeof(buffer))) > 0)
   {   
-    cout << buffer << " joined" << endl;
+    printf("%s joined\n", buffer);
     strcpy(username, buffer);
-    
     strcat(message, "Welcome ");
     strcat(message, username);
-    //print a message about the new client;
     write(skt, message, sizeof(message));
   }
   
-  //write message to each FD
-  pthread_mutex_lock(&m);
-  strcpy(message, "Client ");
+  //create alert string
+  pthread_mutex_lock(&m); // but lock first
+  strcat(message, "ALERT: ");
   strcat(message, username);
-  strcat(message, " has joined the chatroom");
-  
+  strcat(message, " joined the chat");
   strcpy(usernames[location], username);
  
+  // send new join alert to all clients
   for(int i = 0; i < MAX_CLIENT; i++)
-  {
     if(FD[i] > 0 && FD[i] != skt)
-    {
       write(FD[i], message, sizeof(message));
-    }
-  }
-  pthread_mutex_unlock(&m);
     
+  pthread_mutex_unlock(&m); // we're done so unlock
+  
+  // while the client keeps sending messages  
   while ((k = read(skt, buffer, sizeof(buffer))) > 0)
   {
-    pthread_mutex_lock(&m);
-    strcpy(message, username);
-    strcat(message, ": ");
-    strcat(message, buffer);
+    pthread_mutex_lock(&m); // lock
+    strcpy(message, " "); 
+    if (strcmp(buffer, "")) // print the username only if they sent something
+    {
+      strcpy(message, username);
+      strcat(message, ": ");
+      strcat(message, buffer);
+    }
+
     //write message to each FD
     for(int i = 0; i < MAX_CLIENT; i++)
-    {
       if(FD[i] > 0 && FD[i] != skt)
-      {
         write(FD[i], message, sizeof(message));
-      }
-    }
-    pthread_mutex_unlock(&m);       
+    
+    pthread_mutex_unlock(&m); //unlock      
   }
 
+  // if the client has quit the chat, we need
+  //   to close the socket and decrement numClients
   pthread_mutex_lock(&m);
   close(FD[location]);
   FD[location] = 0;
-  cout << username << " has left" << endl;
+  printf("%s has left\n", username);
   numClients--;
   pthread_mutex_unlock(&m);
   pthread_exit(arg);
+
+
   return NULL;
 }

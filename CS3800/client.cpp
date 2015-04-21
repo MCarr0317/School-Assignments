@@ -15,7 +15,7 @@ This file defines the client for a chatroom
 #include <unistd.h>
 #include <stdlib.h>
 
-#define SERVER_PORT 7777
+#define SERVER_PORT 9999
 
 using namespace std;
 
@@ -23,7 +23,7 @@ int clientSocket;
 int k;
 char buff[1024];
 //char buffer[1024];
-char code[]="bRZUkq3h173Uc31";
+char code[]="505";
 bool exitCondition=false;
 
 void signalHandler(int signalNumber)
@@ -86,7 +86,6 @@ int main(int argc, char* argv[])
   // read from the server
   read(clientSocket, buff, sizeof(buff));
   cout << buff << endl;
-  printf("look above here\n");
 
   //create thread for handling simultaneous input & output
   pthread_t readThread;
