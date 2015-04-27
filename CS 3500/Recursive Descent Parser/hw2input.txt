@@ -1,13 +1,10 @@
-prog fibo ( a ) 
-blip 
-  x is 1 ! 
-  y is 2 ! 
-  c is 3 ! 
-  loop $ c lt a $ 
-    x is x + y ! 
-    y is x - y ! 
-    inc c ! 
-  pool
-  ret x ! 
-blorp
-	
+prog main ( ) blip x is 2 + 2 ! print x ! blorp
+prog fibo ( a ) blip x is 1 ! y is 2 ! c is 3 ! loop $ c lt a $ x is x + y ! y is x - y ! inc c ! pool ret x ! blorp
+prog foo ( a , b ) blip if $ a gt b $ ret a ! ex ret b ! fi blorp
+void main ( ) { cout << Hello World; }
+prog foo ( loop ) blip blip ! x is blorp ! ret print ! if
+prog foo ( a , b , c , d , e , f , g ) blip x is 2.3 ! blorp
+prog foo ( a , b , c , d , e , f , g ) blip x is +2.3 ! blorp
+prog foo ( a , b , c , d , e , f , g ) blip x is -2.3 ! blorp
+prog foo ( a , b , c , d , e , f , g ) blip x is +2 ! blorp
+prog foo ( a , b , c , d , e , f , g ) blip x is -2 ! blorp

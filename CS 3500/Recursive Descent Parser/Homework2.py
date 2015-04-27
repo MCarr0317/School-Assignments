@@ -1,4 +1,7 @@
-# Recursive Descent Parser
+# Athour: MATTHEW CARR
+# Homework 2 - Recursive Descent Parser
+
+
 import re, sys, fileinput
 
 class Recursive_decent_parser():
@@ -9,9 +12,11 @@ class Recursive_decent_parser():
 			'neg', '(', ')', 'lt', 'gt', 'eq' , '$', 
 			'!', 'print', 'inc', 'ret', 'if', 'fi', 
 			'ex', 'loop', 'pool', 'prog', 'blip', 'blorp')
+
+		# regex strings for matching tokens
 		self.identifier = r'^[a-zA-Z][a-zA-Z0-9]*$'
-		self.integer = r'^[0-9]+$'
-		self.decimal = r'^[0-9]+.[0-9]+$'
+		self.integer = r'^[+-]?[0-9]+$'
+		self.decimal = r'^[+-]?[0-9]+.[0-9]+$'
 		self.string = r'^\"[a-zA-Z0-9]+\"$'
 
 		# holds the current token through parsing
@@ -19,14 +24,13 @@ class Recursive_decent_parser():
 
 		# holds the part of our string that we have not parsed yet
 		self.string_to_parse = _string_to_parse.split()  # split by all whitespace
-		#print "initial split ", self.string_to_parse
+
 		self.getToken()
-		#print "new token ", self.token
-		#print "new rest of string ", self.string_to_parse
+
 		if self.parse_RoutineDeclaration():  # start
-			sys.exit("CORRECT!")
+			print "CORRECT"
 		else:
-			sys.exit("INVALID!")
+			print "INVALID!"
 
 	def getToken(self):
 		if self.string_to_parse:
@@ -67,7 +71,7 @@ class Recursive_decent_parser():
 		else:
 			#sys.exit("expected prog")
 			return False
-	#  sequence functions are recursive as there is no limit to the length of the sequence
+
 	def parse_ParamSequence(self):
 		if re.match(self.identifier, self.token) != None and self.token not in self.keywords:  # if identifier
 			self.getToken()
@@ -112,16 +116,12 @@ class Recursive_decent_parser():
 					self.getToken()
 					return True
 				else:
-					#print "token: ", self.token
-					#print "rest: ", self.string_to_parse
-					sys.exit("6 expected !")
+					#print "6 expected !"
+					return False
 			else:
-				#print "token: ", self.token
-				#print "rest: ", self.string_to_parse
-				sys.exit("6 expected identifier")
+				#print "6 expected identifier"
+				return False
 		else:
-			#print "token: ", self.token
-			#print "rest: ", self.string_to_parse
 			return False
 
 	def parse_LoopStatement(self):
@@ -137,11 +137,14 @@ class Recursive_decent_parser():
 						self.getToken()
 						return True
 					else:
-						sys.exit("5 expected pool")
+						#print "5 expected pool"
+						return False
 				else:
-					sys.exit("5 expected $")
+					#print "5 expected $"
+					return False
 			else:
-				sys.exit("5 expected $")
+				#print "5 expected $"
+				return False
 		else:
 			return False
 
@@ -161,11 +164,14 @@ class Recursive_decent_parser():
 							self.getToken()
 							return True
 						else:
-							sys.exit("4 expected fi")
+							#print "4 expected fi"
+							return False
 				else:
-					sys.exit("4 expected $")
+					#print "4 expected $"
+					return False
 			else:
-				sys.exit("4 expected $")
+				#print "4 expected $"
+				return False
 		else:
 			return False
 
@@ -178,9 +184,11 @@ class Recursive_decent_parser():
 					self.getToken()
 					return True
 				else:
-					sys.exit("3 expected !")
+					#print "3 expected !"
+					return False
 			else:
-				sys.exit("3 expected identifier")
+				#print "3 expected identifier"
+				return False
 		else:
 			return False
 
@@ -193,9 +201,11 @@ class Recursive_decent_parser():
 					self.getToken()
 					return True
 				else:
-					sys.exit("2 expected !")
+					#print "2 expected !"
+					return False
 			else:
-				sys.exit("2 expected identifier")
+				#print "2 expected identifier"
+				return False
 		else:
 			return False
 
@@ -210,14 +220,12 @@ class Recursive_decent_parser():
 					self.getToken()
 					return True
 				else:
-					#print "token: ", self.token
-					#print "rest: ", self.string_to_parse
-					sys.exit("1 expected !")
+					#print "1 expected !"
+					return False
 			else:
-				sys.exit("1 expected is")
+				#print "1 expected is"
+				return False
 		else:
-			#print "token: ", self.token
-			#print "rest: ", self.string_to_parse
 			return False
 
 	def parse_MulOperator(self):
@@ -261,6 +269,9 @@ class Recursive_decent_parser():
 			self.getToken()
 			self.parse_Factor()
 			return True
+		else:
+			#print "matched no factors"
+			return False
 
 	def parse_Term(self):
 		self.parse_Factor()
@@ -277,19 +288,10 @@ class Recursive_decent_parser():
 		if self.parse_Relation():
 			self.parse_SimpleExpression()
 
-
-
-
-
 def main():
-	#test = "prog fibo ( a ) blip x is 1 ! y is 2 ! c is 3 ! loop $ c lt a $ x is x + y ! y is x - y ! inc c ! pool ret x ! blorp"
-	test = ""
-
 	for line in fileinput.input():
-		test += line
-		
-	n = Recursive_decent_parser(test)
-
+		if line != '\n':
+			Recursive_decent_parser(line)
 
 if __name__ == "__main__":
 	main()
